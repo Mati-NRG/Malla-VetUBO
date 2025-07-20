@@ -1,1 +1,49 @@
+/* --- style.css --- */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e6f7ff;
+  margin: 0;
+  padding: 20px;
+  color: #003366;
+}
+
+h1 {
+  text-align: center;
+  color: #007acc;
+}
+
+#malla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.ramo {
+  background-color: white;
+  border: 2px solid #007acc;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.ramo:hover {
+  background-color: #cceeff;
+}
+
+.ramo.aprobado {
+  background-color: #b3e6ff;
+  border-color: #00aaff;
+  color: #005577;
+  font-weight: bold;
+}
+
+.ramo.bloqueado {
+  background-color: #f0f0f0;
+  color: #aaa;
+  border-style: dashed;
+  cursor: not-allowed;
+}
 

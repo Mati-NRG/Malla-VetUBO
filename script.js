@@ -1,82 +1,141 @@
-// script.js
-
-const ramos = [
+const cursos = {
   // PRIMER AÑO
-  { id: "bio", nombre: "Biología Celular", requisitos: [], desbloquea: ["quim"], semestre: 1 },
-  { id: "mat", nombre: "Matemáticas", requisitos: [], desbloquea: ["bioest", "gen"], semestre: 1 },
-  { id: "ing1", nombre: "Inglés I", requisitos: [], desbloquea: ["ing2"], semestre: 1 },
-  { id: "morfo1", nombre: "Morfología I", requisitos: [], desbloquea: ["morfo2"], semestre: 1 },
-  { id: "hab1", nombre: "Habilidades Académicas I", requisitos: [], desbloquea: ["hab2"], semestre: 1 },
-  { id: "intro", nombre: "Introducción a la Medicina Veterinaria", requisitos: [], desbloquea: [], semestre: 1 },
-
-  { id: "quim", nombre: "Química y Bioquímica para la Vida", requisitos: ["bio"], desbloquea: ["fisio1"], semestre: 2 },
-  { id: "morfo2", nombre: "Morfología II", requisitos: ["morfo1"], desbloquea: ["practica1"], semestre: 2 },
-  { id: "gen", nombre: "Genética Animal", requisitos: ["mat"], desbloquea: [], semestre: 2 },
-  { id: "zoo", nombre: "Zoología", requisitos: [], desbloquea: ["eco"], semestre: 2 },
-  { id: "ing2", nombre: "Inglés II", requisitos: ["ing1"], desbloquea: ["ing3"], semestre: 2 },
-  { id: "hab2", nombre: "Habilidades Académicas II", requisitos: ["hab1"], desbloquea: [], semestre: 2 },
+  "Biología Celular": ["Química y Bioquímica para la Vida"],
+  "Matemáticas": ["Bioestadística", "Genética Animal"],
+  "Inglés I": ["Inglés II"],
+  "Morfología Micro y Macroscópica I": ["Morfología Micro y Macroscópica II"],
+  "Habilidades Académicas I": ["Habilidades Académicas II"],
+  "Introducción a la Medicina Veterinaria": [],
+  "Química y Bioquímica para la Vida": ["Fisiología y Fisiopatología Veterinaria I"],
+  "Morfología Micro y Macroscópica II": ["Práctica Integrada I en Medicina Veterinaria"],
+  "Genética Animal": [],
+  "Zoología": ["Ecología"],
+  "Inglés II": ["Inglés III"],
+  "Habilidades Académicas II": [],
 
   // SEGUNDO AÑO
-  { id: "fisio1", nombre: "Fisiología I", requisitos: ["quim"], desbloquea: ["fisio2"], semestre: 3 },
-  { id: "agentes", nombre: "Agentes Biológicos", requisitos: [], desbloquea: ["inmuno"], semestre: 3 },
-  { id: "bioest", nombre: "Bioestadística", requisitos: ["mat"], desbloquea: ["epi"], semestre: 3 },
-  { id: "admin", nombre: "Administración", requisitos: [], desbloquea: ["formulacion"], semestre: 3 },
-  { id: "eco", nombre: "Ecología", requisitos: ["zoo"], desbloquea: ["bioetica"], semestre: 3 },
-  { id: "ing3", nombre: "Inglés III", requisitos: ["ing2"], desbloquea: ["ing4"], semestre: 3 },
-  { id: "etica", nombre: "Ética y Ciudadanía", requisitos: [], desbloquea: ["resp"], semestre: 3 },
+  "Fisiología y Fisiopatología Veterinaria I": ["Fisiología y Fisiopatología Veterinaria II"],
+  "Agentes Biológicos de Enfermedad": ["Inmunología General"],
+  "Bioestadística": ["Epidemiología"],
+  "Administración de Empresas": ["Formulación y Evaluación de Proyectos"],
+  "Ecología": ["Bioética y Bienestar Animal"],
+  "Inglés III": ["Inglés IV"],
+  "Ética y Ciudadanía": ["Responsabilidad Social Universitaria"],
+  "Fisiología y Fisiopatología Veterinaria II": [
+    "Nutrición y Alimentación Animal",
+    "Farmacología Veterinaria",
+    "Reproducción y Obstetricia animal",
+    "Semiología"
+  ],
+  "Inmunología General": ["Enfermedades Infecciosas y Parasitarias"],
+  "Formulación y Evaluación de Proyectos": [],
+  "Módulo de Investigación e Integración I": ["Módulo de Investigación e Integración II"],
+  "Inglés IV": [],
+  "Responsabilidad Social Universitaria": [],
 
-  { id: "fisio2", nombre: "Fisiología II", requisitos: ["fisio1"], desbloquea: ["nut", "farma", "repro", "semio"], semestre: 4 },
-  { id: "inmuno", nombre: "Inmunología", requisitos: ["agentes"], desbloquea: ["enf_inf"], semestre: 4 },
-  { id: "formulacion", nombre: "Formulación y Evaluación", requisitos: ["admin"], desbloquea: [], semestre: 4 },
-  { id: "modulo1", nombre: "Módulo I", requisitos: [], desbloquea: ["modulo2"], semestre: 4 },
-  { id: "ing4", nombre: "Inglés IV", requisitos: ["ing3"], desbloquea: [], semestre: 4 },
-  { id: "resp", nombre: "Responsabilidad Social", requisitos: ["etica"], desbloquea: [], semestre: 4 },
+  // TERCER AÑO
+  "Patología Veterinaria": ["Producción y Patología Aviar"],
+  "Enfermedades Infecciosas y Parasitarias": ["Salud Pública Veterinaria"],
+  "Epidemiología": ["Salud Pública Veterinaria"],
+  "Nutrición y Alimentación Animal": ["Bases de Producción Animal Sustentable"],
+  "Bioética y Bienestar Animal": ["Biología y Conservación de Especies"],
+  "Práctica Integrada II en Medicina Veterinaria": ["Práctica Integrada III en Medicina Veterinaria"],
+  "Farmacología Veterinaria": ["Cirugía Veterinaria"],
+  "Semiología": [
+    "Hematología y Bioquímica Clínica",
+    "Imagenología Diagnóstica",
+    "Reproducción y Obstetricia animal"
+  ],
+  "Salud Pública Veterinaria": ["Inocuidad y Calidad Alimentaria"],
+  "Bases de Producción Animal Sustentable": [
+    "Producción de Rumiantes",
+    "Producción y Patología Aviar"
+  ],
+  "Biología y Conservación de Especies": ["Manejo y Conservación de Fauna Silvestre"],
+  "Práctica Integrada III en Medicina Veterinaria": ["Práctica Integrada IV en Medicina Veterinaria"],
 
-  // Continuar con tercer, cuarto y quinto año...
-];
+  // CUARTO AÑO
+  "Reproducción y Obstetricia animal": [],
+  "Imagenología Diagnóstica": ["Medicina Interna de animales de compañía"],
+  "Inocuidad y Calidad Alimentaria": ["Inspección Veterinaria de Alimentos"],
+  "Producción de Rumiantes": [
+    "Producción y Patología Aviar",
+    "Acuicultura y Patología de Peces",
+    "Internado Producción Animal"
+  ],
+  "Manejo y Conservación de Fauna Silvestre": ["Legislación y Evaluación de Impacto Ambiental"],
+  "Práctica Integrada IV en Medicina Veterinaria": ["Práctica Integrada V Formación Práctica en Medicina Veterinaria"],
+  "Hematología y Bioquímica Clínica": [],
+  "Medicina Interna de animales de compañía": [
+    "Cirugía Veterinaria",
+    "Medicina Interna de animales mayores"
+  ],
+  "Inspección Veterinaria de Alimentos": ["Internado de Salud Pública"],
+  "Producción y Patología Aviar": [],
+  "Legislación y Evaluación de Impacto Ambiental": [
+    "Internado de Conservación y Biodiversidad",
+    "Acuicultura y Patología de Peces"
+  ],
+  "Módulo de Investigación e Integración II": [],
+  "Práctica Integrada V Formación Práctica en Medicina Veterinaria": [],
 
-const estadoRamos = {};
-
-function crearMalla() {
-  ramos.forEach(ramo => {
-    const div = document.createElement("div");
-    div.classList.add("ramo");
-    div.dataset.id = ramo.id;
-    div.innerText = ramo.nombre;
-
-    const bloqueado = ramo.requisitos.some(req => !estadoRamos[req]);
-    if (bloqueado) div.classList.add("bloqueado");
-
-    div.addEventListener("click", () => toggleRamo(ramo));
-
-    const contenedor = document.getElementById(`semestre${ramo.semestre}`);
-    if (contenedor) contenedor.appendChild(div);
-  });
-}
-
-function toggleRamo(ramo) {
-  const id = ramo.id;
-  const div = document.querySelector(`[data-id='${id}']`);
-  if (div.classList.contains("bloqueado")) return;
-  estadoRamos[id] = !estadoRamos[id];
-  actualizarMalla();
-}
-
-function actualizarMalla() {
-  document.querySelectorAll(".ramo").forEach(div => {
-    const id = div.dataset.id;
-    const ramo = ramos.find(r => r.id === id);
-    const aprobado = estadoRamos[id];
-    const requisitosCumplidos = ramo.requisitos.every(req => estadoRamos[req]);
-    div.className = "ramo";
-    if (aprobado) div.classList.add("aprobado");
-    else if (!requisitosCumplidos) div.classList.add("bloqueado");
-  });
-}
-
-window.onload = () => {
-  ramos.forEach(r => estadoRamos[r.id] = false);
-  crearMalla();
-  actualizarMalla();
+  // QUINTO AÑO
+  "Cirugía Veterinaria": ["Internado Quirúrgico"],
+  "Medicina Interna de animales mayores": ["Internado de medicina interna"],
+  "Internado de Salud Pública": [],
+  "Internado de Conservación y Biodiversidad": [],
+  "Trabajo de Titulación I": ["Trabajo de titulación II"],
+  "Electivo de Formación General I": ["Electivo de Formación General II"],
+  "Internado Quirúrgico": [],
+  "Internado de medicina interna": [],
+  "Electivo de profundización": [],
+  "Trabajo de titulación II": [],
+  "Electivo de Formación General II": []
 };
 
+const estadoCursos = {};
+
+function crearCurso(nombre) {
+  const curso = document.createElement("div");
+  curso.className = "curso bloqueado";
+  curso.textContent = nombre;
+  curso.dataset.nombre = nombre;
+  curso.addEventListener("click", () => aprobarCurso(nombre));
+  document.getElementById("malla").appendChild(curso);
+}
+
+function aprobarCurso(nombre) {
+  if (estadoCursos[nombre]?.aprobado || document.querySelector(`[data-nombre='${nombre}']`).classList.contains("bloqueado"))
+    return;
+
+  estadoCursos[nombre].aprobado = true;
+  const cursoEl = document.querySelector(`[data-nombre='${nombre}']`);
+  cursoEl.classList.add("aprobado");
+
+  for (const [nombreCurso, prereqs] of Object.entries(cursos)) {
+    if (prereqs.includes(nombre)) {
+      const desbloquear = prereqs.every(prereq => estadoCursos[prereq]?.aprobado);
+      if (desbloquear) {
+        const el = document.querySelector(`[data-nombre='${nombreCurso}']`);
+        el.classList.remove("bloqueado");
+      }
+    }
+  }
+}
+
+function inicializar() {
+  for (const nombre in cursos) {
+    estadoCursos[nombre] = { aprobado: false };
+    crearCurso(nombre);
+  }
+
+  for (const nombre in cursos) {
+    const esInicial = !Object.values(cursos).some(dep => dep.includes(nombre));
+    if (esInicial) {
+      const el = document.querySelector(`[data-nombre='${nombre}']`);
+      el.classList.remove("bloqueado");
+    }
+  }
+}
+
+inicializar();

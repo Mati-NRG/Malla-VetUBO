@@ -1,30 +1,47 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #e6f7ff;
+  background-color: #f0f8ff;
   margin: 0;
-  padding: 20px;
-  color: #003366;
+  padding: 0;
 }
 
 h1 {
   text-align: center;
-  color: #007acc;
-  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #00bfff;
+  color: white;
+  margin: 0;
 }
 
 #malla {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
 }
 
-.ramo {
-  background-color: white;
-  border: 2px solid #007acc;
+.curso {
+  background-color: #e6f7ff;
+  border: 2px solid #00bfff;
   border-radius: 8px;
-  padding: 12px;
+  padding: 10px;
+  margin: 6px;
+  width: 200px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 2px 4px rgba(0, 0
+  user-select: none;
+  transition: background-color 0.3s;
+}
 
+.curso.bloqueado {
+  background-color: #b0c4de;
+  border-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.curso.aprobado {
+  background-color: #00bfff;
+  color: white;
+  text-decoration: line-through;
+}

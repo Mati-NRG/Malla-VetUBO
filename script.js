@@ -1,5 +1,5 @@
 const cursos = {
-  // PRIMER AÑO
+  // (MISMO LISTADO DE CURSOS Y DEPENDENCIAS QUE YA TENÍAS)
   "Biología Celular": ["Química y Bioquímica para la Vida"],
   "Matemáticas": ["Bioestadística", "Genética Animal"],
   "Inglés I": ["Inglés II"],
@@ -12,8 +12,6 @@ const cursos = {
   "Zoología": ["Ecología"],
   "Inglés II": ["Inglés III"],
   "Habilidades Académicas II": [],
-
-  // SEGUNDO AÑO
   "Fisiología y Fisiopatología Veterinaria I": ["Fisiología y Fisiopatología Veterinaria II"],
   "Agentes Biológicos de Enfermedad": ["Inmunología General"],
   "Bioestadística": ["Epidemiología"],
@@ -32,8 +30,6 @@ const cursos = {
   "Módulo de Investigación e Integración I": ["Módulo de Investigación e Integración II"],
   "Inglés IV": [],
   "Responsabilidad Social Universitaria": [],
-
-  // TERCER AÑO
   "Patología Veterinaria": ["Producción y Patología Aviar"],
   "Enfermedades Infecciosas y Parasitarias": ["Salud Pública Veterinaria"],
   "Epidemiología": ["Salud Pública Veterinaria"],
@@ -53,8 +49,6 @@ const cursos = {
   ],
   "Biología y Conservación de Especies": ["Manejo y Conservación de Fauna Silvestre"],
   "Práctica Integrada III en Medicina Veterinaria": ["Práctica Integrada IV en Medicina Veterinaria"],
-
-  // CUARTO AÑO
   "Reproducción y Obstetricia animal": [],
   "Imagenología Diagnóstica": ["Medicina Interna de animales de compañía"],
   "Inocuidad y Calidad Alimentaria": ["Inspección Veterinaria de Alimentos"],
@@ -78,8 +72,6 @@ const cursos = {
   ],
   "Módulo de Investigación e Integración II": [],
   "Práctica Integrada V Formación Práctica en Medicina Veterinaria": [],
-
-  // QUINTO AÑO
   "Cirugía Veterinaria": ["Internado Quirúrgico"],
   "Medicina Interna de animales mayores": ["Internado de medicina interna"],
   "Internado de Salud Pública": [],
@@ -93,7 +85,22 @@ const cursos = {
   "Electivo de Formación General II": []
 };
 
-const estadoCursos = {};
+let estadoCursos = {};
+
+function guardarProgreso() {
+  localStorage.setItem("estadoCursos", JSON.stringify(estadoCursos));
+}
+
+function cargarProgreso() {
+  const datos = localStorage.getItem("estadoCursos");
+  if (datos) {
+    estadoCursos = JSON.parse(datos);
+  } else {
+    for (const nombre in cursos) {
+      estadoCursos[nombre] = { aprobado: false };
+    }
+  }
+}
 
 function crearCurso(nombre) {
   const curso = document.createElement("div");
@@ -105,35 +112,41 @@ function crearCurso(nombre) {
 }
 
 function aprobarCurso(nombre) {
-  if (estadoCursos[nombre]?.aprobado || document.querySelector(`[data-nombre='${nombre}']`).classList.contains("bloqueado"))
-    return;
+  const el = document.querySelector(`[data-nombre='${nombre}']`);
+  if (estadoCursos[nombre].aprobado || el.classList.contains("bloqueado")) return;
 
   estadoCursos[nombre].aprobado = true;
-  const cursoEl = document.querySelector(`[data-nombre='${nombre}']`);
-  cursoEl.classList.add("aprobado");
+  el.classList.add("aprobado");
+  guardarProgreso();
 
-  for (const [nombreCurso, prereqs] of Object.entries(cursos)) {
+  for (const [curso, prereqs] of Object.entries(cursos)) {
     if (prereqs.includes(nombre)) {
-      const desbloquear = prereqs.every(prereq => estadoCursos[prereq]?.aprobado);
-      if (desbloquear) {
-        const el = document.querySelector(`[data-nombre='${nombreCurso}']`);
-        el.classList.remove("bloqueado");
+      const puedeDesbloquear = prereqs.every(pr => estadoCursos[pr]?.aprobado);
+      if (puedeDesbloquear) {
+        document.querySelector(`[data-nombre='${curso}']`).classList.remove("bloqueado");
       }
     }
   }
 }
 
 function inicializar() {
+  cargarProgreso();
   for (const nombre in cursos) {
-    estadoCursos[nombre] = { aprobado: false };
     crearCurso(nombre);
   }
 
   for (const nombre in cursos) {
-    const esInicial = !Object.values(cursos).some(dep => dep.includes(nombre));
-    if (esInicial) {
-      const el = document.querySelector(`[data-nombre='${nombre}']`);
+    const el = document.querySelector(`[data-nombre='${nombre}']`);
+    if (estadoCursos[nombre]?.aprobado) {
       el.classList.remove("bloqueado");
+      el.classList.add("aprobado");
+    } else {
+      const esInicial = !Object.values(cursos).some(dep => dep.includes(nombre));
+      if (esInicial) el.classList.remove("bloqueado");
+
+      const prereqs = cursos[nombre];
+      const desbloqueado = prereqs.every(pr => estadoCursos[pr]?.aprobado);
+      if (desbloqueado) el.classList.remove("bloqueado");
     }
   }
 }

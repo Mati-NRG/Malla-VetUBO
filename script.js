@@ -45,6 +45,62 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function crearBotonesGlobales() {
+    const contenedor = document.createElement("div");
+    contenedor.classList.add("botones-globales");
+
+    const reiniciarBtn = document.createElement("button");
+    reiniciarBtn.textContent = "Reiniciar progreso";
+    reiniciarBtn.onclick = () => {
+      if (confirm("¿Seguro que deseas reiniciar todo el progreso?")) {
+        Object.keys(localStorage).forEach(key => {
+          if (cursos[key]) localStorage.setItem(key, "bloqueado");
+        });
+        location.reload();
+      }
+    };
+
+    const exportarBtn = document.createElement("button");
+    exportarBtn.textContent = "Exportar progreso";
+    exportarBtn.onclick = () => {
+      const estado = {};
+      Object.keys(cursos).forEach(c => estado[c] = localStorage.getItem(c));
+      const blob = new Blob([JSON.stringify(estado, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = "progreso_malla.json";
+      link.click();
+    };
+
+    const importarBtn = document.createElement("button");
+    importarBtn.textContent = "Importar progreso";
+    importarBtn.onclick = () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.onchange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = JSON.parse(e.target.result);
+          Object.entries(data).forEach(([key, value]) => {
+            if (cursos[key]) localStorage.setItem(key, value);
+          });
+          location.reload();
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    };
+
+    contenedor.appendChild(reiniciarBtn);
+    contenedor.appendChild(exportarBtn);
+    contenedor.appendChild(importarBtn);
+    document.body.insertBefore(contenedor, document.getElementById("malla"));
+  }
+
+  crearBotonesGlobales();
+
   // PRIMER AÑO
   crearCurso("Biología Celular", "semestre1");
   crearCurso("Matemáticas", "semestre1");
